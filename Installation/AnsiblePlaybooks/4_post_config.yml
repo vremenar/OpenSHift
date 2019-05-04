@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks: 
+    - name: Setup insecure registry (step 1/2) 
+      lineinfile: 
+        path: "/etc/sysconfig/docker"
+        line: "OPTIONS='--insecure-registry=172.30.0.0/16 --selinux-enabled --log-opt max-size=1M --log-opt max-file=3'"
+    - name: IPv4 Forward (step 2/2)
+      shell: "sysctl -w net.ipv4.ip_forward=1"

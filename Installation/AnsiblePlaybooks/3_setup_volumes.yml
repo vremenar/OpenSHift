@@ -1,0 +1,49 @@
+---
+- hosts: all
+  tasks: 
+    - name: Setup volumes (step 1/16) 
+      lineinfile: 
+        path: "/etc/sysconfig/docker-storage-setup"
+        line: "DEVS=/dev/sdb"
+    - name: Setup volumes (step 2/16)
+      lineinfile: 
+        path: "/etc/sysconfig/docker-storage-setup"
+        line: "VG=docker-vg"
+    - name: Setup volumes (step 3/16)
+      shell: docker-storage-setup
+- hosts: os-master
+  tasks: 
+    - name: Setup volumes (step 5/16)
+      shell: "vgcreate etcd-vg /dev/sdc"
+    - name: Setup volumes (step 6/16)
+      shell: "lvcreate -n etcd-lv -l 100%VG etcd-vg"
+    - name: Setup volumes (step 7/16)
+      shell: "mkfs.xfs /dev/mapper/etcd--vg-etcd--lv"
+    - name: Setup volumes (step 8/16)
+      file:
+        path: "/var/lib/etcd"
+        state: directory
+    - name: Setup volumes (step 9/16)
+      lineinfile: 
+        path: "/etc/fstab"
+        line: "/dev/mapper/etcd--vg-etcd--lv /var/lib/etcd xfs defaults 0 0"
+    - name: Setup volumes (step 10/16)
+      shell: "mount -a"
+- hosts: os-non-master
+  tasks: 
+    - name: Setup volumes (step 11/16)
+      shell: "vgcreate origin-vg /dev/sdc"
+    - name: Setup volumes (step 12/16)
+      shell: "lvcreate -n origin-lv -l 100%VG origin-vg"
+    - name: Setup volumes (step 13/16)
+      shell: "mkfs.xfs /dev/mapper/origin--vg-origin--lv"
+    - name: Setup volumes (step 14/16)
+      file:
+        path: "/var/lib/origin"
+        state: directory
+    - name: Setup volumes (step 15/16)
+      lineinfile: 
+        path: "/etc/fstab"
+        line: "/dev/mapper/origin--vg-origin--lv /var/lib/origin xfs defaults 0 0"
+    - name: Setup volumes (step 16/16)
+      shell: "mount -a"

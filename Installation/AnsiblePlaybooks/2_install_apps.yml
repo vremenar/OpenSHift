@@ -1,0 +1,84 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+  - name: Install nano (step 1/20)
+    yum:
+      name: nano
+      state: latest
+  - name: Install wget (step 2/20)
+    yum:
+      name: wget
+      state: latest
+  - name: Install git (step 3/20)
+    yum:
+      name: git
+      state: latest
+  - name: Install lvm2 (step 4/20)
+    yum:
+      name: lvm2
+      state: latest
+  - name: Install net-tools (step 5/20)
+    yum: 
+      name: net-tools
+      state: latest
+  - name: Install Docker (step 6/20)
+    yum:
+      name: docker-1.13.1
+      state: latest
+  - name: Install bind-utils (step 7/20)
+    yum:
+      name: bind-utils
+      state: latest
+  - name: Install iptables-services (step 8/20)
+    yum:
+      name: iptables-services
+      state: latest
+  - name: Install bridge-utils (step 9/20)
+    yum:
+      name: bridge-utils
+      state: latest
+  - name: Install openssl-devel (step 10/20)
+    yum:
+      name: openssl-devel
+      state: latest
+  - name: Install bash-completion (step 11/20)
+    yum:
+      name: bash-completion
+      state: latest
+  - name: Install kexec-tools (step 12/20)
+    yum:
+      name: kexec-tools
+      state: latest
+  - name: Install sos (step 13/20)
+    yum:
+      name: sos
+      state: latest
+  - name: Install psacct (step 14/20)
+    yum:
+      name: psacct
+      state: latest
+  - name: Install python-cryptography (step 15/20)
+    yum:
+      name: python-cryptography
+      state: latest
+  - name: Install python2-pip (step 16/20)
+    yum:
+      name: python2-pip
+      state: latest
+  - name: Install python-devel (step 17/20)
+    yum:
+      name: python-devel
+      state: latest
+  - name: Install python-passlib (step 18/20)
+    yum:
+      name: python-passlib
+      state: latest
+  - name: Install java-1.8.0-openjdk-headless (step 19/20)
+    yum:
+      name: java-1.8.0-openjdk-headless
+      state: latest
+  - name: Install Development Tools (step 20/20)
+    yum:
+      name: "@Development Tools"
+      state: latest
