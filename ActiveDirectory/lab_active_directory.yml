@@ -1,9 +1,10 @@
 kind: LDAPSyncConfig
 apiVersion: v1
 url: ldap://lab.local:389
+insecure: true
 activeDirectory:
     usersQuery:
-        baseDN: "ou=accounts,dc=lab,dc=local"
+        baseDN: "OU=Accounts,DC=lab,DC=local"
         scope: sub
         derefAliases: never
         filter: (objectclass=inetOrgPerson)
@@ -11,7 +12,7 @@ activeDirectory:
     userNameAttributes: [ sAMAccountName ] 
     groupMembershipAttributes: [ memberOf ] 
     groupsQuery:
-        baseDN: "ou=openshift,ou=applications,ou=security groups,dc=lab,dc=local"
+        baseDN: "OU=OpenShift,OU=Applications,OU=Security Groups,DC=lab,DC=local"
         scope: sub
         derefAliases: never
         pageSize: 0
