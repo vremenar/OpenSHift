@@ -7,19 +7,20 @@ bindPassword:
   file: /etc/origin/master/lab_ldap_bind.encrypted
   keyFile: /etc/origin/master/lab_ldap_bind.key
 activeDirectory:
-    usersQuery:
-        baseDN: "OU=Accounts,DC=lab,DC=local"
-        scope: sub
-        derefAliases: never
-        filter: (objectclass=inetOrgPerson)
-        pageSize: 0
-    userNameAttributes: [ sAMAccountName ] 
-    groupMembershipAttributes: [ memberOf ] 
-    groupsQuery:
-        baseDN: "OU=OpenShift,OU=Applications,OU=Security Groups,DC=lab,DC=local"
-        scope: sub
-        derefAliases: never
-        pageSize: 0
+  usersQuery:
+    baseDN: "OU=Accounts,DC=lab,DC=local"
+    scope: sub
+    derefAliases: never
+    filter: (objectClass=organizationalPerson)
+    pageSize: 0
+  userNameAttributes: [ sAMAccountName ] 
+  groupMembershipAttributes: [ memberOf ] 
+  groupsQuery:
+    baseDN: "OU=OpenShift,OU=Applications,OU=Security Groups,DC=lab,DC=local"
+    scope: sub
+    derefAliases: never
+    pageSize: 0
+    filter: (objectClass=group)
     groupUIDAttribute: dn 
     groupNameAttributes: [ cn ] 
 groupUIDNameMapping:
