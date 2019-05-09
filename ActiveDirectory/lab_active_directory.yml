@@ -1,0 +1,23 @@
+kind: LDAPSyncConfig
+apiVersion: v1
+url: ldap://lab.local:389
+activeDirectory:
+    usersQuery:
+        baseDN: "ou=accounts,dc=lab,dc=local"
+        scope: sub
+        derefAliases: never
+        filter: (objectclass=inetOrgPerson)
+        pageSize: 0
+    userNameAttributes: [ sAMAccountName ] 
+    groupMembershipAttributes: [ memberOf ] 
+    groupsQuery:
+        baseDN: "ou=openshift,ou=applications,ou=security groups,dc=lab,dc=local"
+        scope: sub
+        derefAliases: never
+        pageSize: 0
+    groupUIDAttribute: dn 
+    groupNameAttributes: [ cn ] 
+groupUIDNameMapping:
+  "CN=HR_GRP_OpenShift_Cluster_Admins,OU=OpenShift,OU=Applications,OU=Security Groups,DC=lab,DC=local": cluster-admins
+  "CN=HR_GRP_OpenShift_Project_Owners,OU=OpenShift,OU=Applications,OU=Security Groups,DC=lab,DC=local": project-owners
+  "CN=HR_GRP_OpenShift_Viewers,OU=OpenShift,OU=Applications,OU=Security Groups,DC=lab,DC=local": viewers
