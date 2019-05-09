@@ -2,6 +2,10 @@ kind: LDAPSyncConfig
 apiVersion: v1
 url: ldap://lab.local:389
 insecure: true
+bindDN: cn=svcosldap,ou=accounts,dc=lab,dc=local
+bindPassword:
+  file: /etc/origin/master/lab_ldap_bind.encrypted
+  keyFile: /etc/origin/master/lab_ldap_bind.key
 activeDirectory:
     usersQuery:
         baseDN: "OU=Accounts,DC=lab,DC=local"
