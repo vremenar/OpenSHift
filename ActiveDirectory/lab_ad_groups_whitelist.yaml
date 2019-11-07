@@ -1,0 +1,3 @@
+CN=OpenShift_Cluster_Admin,OU=OpenShift,OU=Security Groups,DC=lab,DC=local
+CN=OpenShift_User,OU=OpenShift,OU=Security Groups,DC=lab,DC=local
+CN=OpenShift_MojProjekt_Admin,OU=OpenShift,OU=Security Groups,DC=lab,DC=local

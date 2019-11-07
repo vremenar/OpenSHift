@@ -1,0 +1,29 @@
+kind: LDAPSyncConfig
+apiVersion: v1
+url: ldap://lab.local:389
+insecure: true
+bindDN: "cn=svcOSLDAP,ou=Users,dc=lab,dc=local"
+bindPassword:
+  file: "/etc/origin/master/lab_ldap_bind.encrypted"
+  keyFile: "/etc/origin/master/lab_ldap_bind.key"
+activeDirectory:
+  usersQuery:
+    baseDN: "OU=Accounts,DC=lab,DC=local"
+    scope: sub
+    derefAliases: never
+    filter: (objectClass=organizationalPerson)
+    pageSize: 0
+  userNameAttributes: [ sAMAccountName ] 
+  groupMembershipAttributes: [ memberOf ] 
+  groupsQuery:
+    baseDN: "OU=OpenShift,OU=Security Groups,DC=lab,DC=local"
+    scope: sub
+    derefAliases: never
+    pageSize: 0
+    filter: (objectClass=group)
+    groupUIDAttribute: dn 
+    groupNameAttributes: [ cn ] 
+groupUIDNameMapping:
+  "CN=OpenShift_Cluster_Admin,OU=OpenShift,OU=Security Groups,DC=lab,DC=local": lab-cluster-admins
+  "CN=OpenShift_User,OU=OpenShift,OU=Security Groups,DC=lab,DC=local": lab-users
+  "CN=OpenShift_MojProjekt_Admin,OU=OpenShift,OU=Security Groups,DC=lab,DC=local": lab-mojprojekt-admins
