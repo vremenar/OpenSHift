@@ -15,7 +15,7 @@ mkdir -p "${SYS_BACKUP_DIR}/etc/pki/ca-trust/"
 mkdir -p "${SYS_BACKUP_DIR}/etc/docker/certs.d/"
 mkdir -p "${SYS_BACKUP_DIR}/etc/etcd/"
 
-echo -e "[$(date +%x-%X)] Filesystem backup"
+echo -e "[$(date +%x-%X)] Starting filesystem backup"
 
 # Backup OpenShift
 cp -aR /etc/origin/* ${SYS_BACKUP_DIR}/etc/origin/
@@ -39,21 +39,39 @@ cp -aR /etc/etcd/* ${SYS_BACKUP_DIR}/etc/etcd/
 # Backup list of installed packages
 rpm -qa | sort | tee ${SYS_BACKUP_DIR}/packages.log > /dev/null 2>&1
 
-echo -e "[$(date +%x-%X)] OpenShift projects backup"
+echo -e "[$(date +%x-%X)] Starting OpenShift backup"
 
 # Login to OpenShift
 oc login -u system:admin > /dev/null 2>&1
 
+# Backup all cluster-wide resources
+mkdir -p "${APP_BACKUP_DIR}"
+RESOURCES=$(oc api-resources -o name --namespaced=false --verbs=get list | cut -d'.' -f1)
+for R in $RESOURCES
+do
+    echo -e "[$(date +%x-%X)] OpenShift cluster ${R} resource backup"
+    oc get -o yaml --export $R > ${APP_BACKUP_DIR}/${R}.yaml
+done
+
 # Get all projects
+echo -e "[$(date +%x-%X)] Starting OpenShift projects backup"
 PROJECTS=$(oc get projects -o name | cut -d'/' -f2)
+
+# Get all namespaced K8s/OpenShift resource types
+RESOURCES=$(oc api-resources -o name --namespaced=true --verbs=get list | cut -d'.' -f1)
 
 # Backup all projects into designated folder
 for P in $PROJECTS
 do
     echo -e "[$(date +%x-%X)] Starting backup of ${P} project"
     mkdir -p "${APP_BACKUP_DIR}/${P}/"
-    oc project $P > /dev/null 2>&1
+    oc project $p > /dev/null 2>&1
     oc get -o yaml --export all > ${APP_BACKUP_DIR}/${P}/${P}.yaml
+    for R in $RESOURCES
+    do
+        echo -e "[$(date +%x-%X)] OpenShift project ${P} resource ${R} backup"
+        oc get -o yaml --export $R > ${APP_BACKUP_DIR}/${P}/${P}_${R}.yaml
+    done
 done
 
 echo -e "[$(date +%x-%X)] Delete old backups"
